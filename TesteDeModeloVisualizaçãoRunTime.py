@@ -10,6 +10,7 @@ expressoes = ["Raiva", "Nojo", "Medo", "Feliz", "Triste", "Surpreso", "Neutro"]
 # Caminhos para os arquivos do modelo Haar Cascade para detecção de faces e o modelo treinado
 cascade_faces = 'haarcascade_frontalface_default.xml'
 caminho_modelo = 'modelo_01_expressoes.h5'
+#caminho_modelo = 'modelo_expressoes1.h5'
 
 # Inicializa o modelo Haar Cascade para detecção de faces
 face_detection = cv2.CascadeClassifier(cv2.data.haarcascades + cascade_faces)
@@ -71,6 +72,11 @@ else:
 
                 # Desenha um retângulo ao redor da face detectada para destacá-la
                 cv2.rectangle(original, (fX, fY), (fX + fW, fY + fH), (255, 0, 255), 2)
+               
+                if len(faces) > 1:
+                    cv2.putText(original, expressoes[int(np.argmax(preds))], (fX, fY),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2, cv2.LINE_AA)  # Escreve a expressão prevista no rosto
+
 
                 # Mostra um gráfico de barras das emoções se apenas uma face for detectada
                 if len(faces) == 1:
@@ -79,7 +85,9 @@ else:
                         text = "{}: {:.2f}%".format(emotion, prob * 100)
                         w = int(prob * 300)
                         cv2.rectangle(original, (7, (i * 35) + 5), (w, (i * 35) + 35), (255, 0, 255), -1)
-                        cv2.putText(original, text, (10, (i * 35) + 23), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1, cv2.LINE_AA)
+                        cv2.putText(original, text, (10, (i * 35) + 23), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0,0,0), 1, cv2.LINE_AA)
+
+                
         else:
             print('Nenhuma face detectada')
 
